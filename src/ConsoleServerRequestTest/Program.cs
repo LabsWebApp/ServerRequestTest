@@ -1,12 +1,17 @@
-﻿using System;
+﻿using ServerRequestTestLibrary;
 using static System.Console;
-using ServerRequestTest.SingleRequests;
+using ServerRequestTestLibrary.SingleRequests;
 
-namespace ServerRequestTest
+namespace ConsoleServerRequestTest
 {
+    /// <summary>
+    /// Точка входа
+    /// </summary>
     class Program
     {
-        //http://microsoft.com/
+        /// <summary>
+        /// Управление запуском тестирования
+        /// </summary>
         static void Main()
         { 
             Restart:
@@ -23,7 +28,7 @@ namespace ServerRequestTest
 
             Recount:
             WriteLine("Введите количество тестов:");
-            if (!int.TryParse(ReadLine() ?? "", out int count))
+            if (!int.TryParse(ReadLine() ?? "", out var count))
                 count = 1;
 
             Repeat:
@@ -32,6 +37,7 @@ namespace ServerRequestTest
                 1 => new SocketClient(host, count),
                 _ => new SimpleHttp(host, count)
             };
+            
             Provider.RunInConsole(source);
 
             WriteLine("Провести новый тест?\n(r - повторить предыдущий; c - изменить кол-во тестов; y - новый, выход - любая клавиша)");

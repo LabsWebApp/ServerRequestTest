@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>ConsoleServerRequestTest</RootNamespace>
+    <Company>VovikDoc</Company>
+    <Authors>Vladimir Skopin</Authors>
+    <Copyright>VovikDoc©</Copyright>
+    <Description>Стресс-тест для проверки работоспособности различных соединений - консольный запуск</Description>
+    <ApplicationIcon>request.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServerRequestTestLibrary\ServerRequestTestLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

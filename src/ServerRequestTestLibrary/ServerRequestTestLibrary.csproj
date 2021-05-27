@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vladimir Skopin</Authors>
+    <Company>VovikDoc</Company>
+    <Copyright>VovikDoc©</Copyright>
+    <Description>Библиотека с классами, осуществляющими построение и запуск стресс-тестов для проверки работоспособности различных соединений в различных средах.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;SYSLIB0006</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+	<ProjectCapability Include="DynamicDependentFile" />
+	<ProjectCapability Include="DynamicFileNesting" />
+  </ItemGroup>
+</Project>

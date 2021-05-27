@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Net.Http;
-using ServerRequestTest.SingleRequests.Exceptions;
+using ServerRequestTestLibrary.SingleRequests.Exceptions;
 
-namespace ServerRequestTest.SingleRequests
+namespace ServerRequestTestLibrary.SingleRequests
 {
+    /// <summary>
+    /// Оболочка http(s) запроса 
+    /// </summary>
     public class SimpleHttp : Request
     {
+        /// <summary>
+        /// Ограничение на размер текста контента
+        /// </summary>
         private const int MaxTextLength = 1000000;
+
+        /// <summary>
+        /// Инициализация оболочки http(s) запроса
+        /// </summary>
+        /// <param name="host">URL или IP запроса</param>
+        /// <param name="count">кол-во тестов</param>
         public SimpleHttp(string host, int count = 1)
         {
             Host = host;
