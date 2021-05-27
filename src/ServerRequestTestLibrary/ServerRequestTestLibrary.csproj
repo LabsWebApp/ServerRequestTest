@@ -5,8 +5,9 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vladimir Skopin</Authors>
     <Company>VovikDoc</Company>
-    <Copyright>VovikDoc©</Copyright>
+    <Copyright>© 2021 VovikDoc</Copyright>
     <Description>Библиотека с классами, осуществляющими построение и запуск стресс-тестов для проверки работоспособности различных соединений в различных средах.</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -6,9 +6,10 @@
     <RootNamespace>ConsoleServerRequestTest</RootNamespace>
     <Company>VovikDoc</Company>
     <Authors>Vladimir Skopin</Authors>
-    <Copyright>VovikDoc©</Copyright>
+    <Copyright>© 2021 VovikDoc</Copyright>
     <Description>Стресс-тест для проверки работоспособности различных соединений - консольный запуск</Description>
     <ApplicationIcon>request.ico</ApplicationIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

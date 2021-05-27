@@ -4,14 +4,17 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using ServerRequestTestLibrary.SingleRequests;
+using ServerRequestTestLibrary;
 
-namespace ServerRequestTestLibrary
+namespace ConsoleServerRequestTest
 {
     /// <summary>
-    /// Провайдер управления теста (Part "Console")
+    /// Провайдер управления теста
     /// </summary>
-    public partial class Provider
+    internal class ConsoleProvider : Provider
     {
+        private ConsoleProvider(Request single) : base(single) { }
+
         #region Static Methods
         /// <summary>
         /// Статический запуск теста в консольном приложении
@@ -19,7 +22,7 @@ namespace ServerRequestTestLibrary
         /// <param name="request">конкретная оболочка единичных тестов</param>
         public static void RunInConsole(Request request)
         {
-            using var provider = new Provider(request);
+            using var provider = new ConsoleProvider(request);
             provider.RunInConsole();
         }
 
@@ -31,7 +34,7 @@ namespace ServerRequestTestLibrary
         /// <param name="frequency">частота смены "кадров" в мс</param>
         private static void DisplayProgress(Task test, CancellationTokenSource cancellation, int frequency = 40)
         {
-            void Escape(object o, ConsoleCancelEventArgs consoleCancelEventArgs)
+            void Escape(object _, ConsoleCancelEventArgs consoleCancelEventArgs)
             {
                 Write("\b");
                 WriteLine("Принудительная остановка теста, подождите ...");
@@ -87,15 +90,15 @@ namespace ServerRequestTestLibrary
         /// <summary>
         /// Запуск теста в консольном приложении
         /// </summary>
-        private partial void RunInConsole()
+        private void RunInConsole()
         {
-            WriteLine($"Стартуем тест (кол-во запросов: {_single.Count}) ...");
+            WriteLine($"Стартуем тест (кол-во запросов: {Count}) ...");
             WriteLine("(Ctl+С - принудительно завершить тестирование)");
             Beep();
             Stopwatch sw = Stopwatch.StartNew();
             var test = Run();
             ForegroundColor = ConsoleColor.DarkBlue;
-            DisplayProgress(test, _cancelSource);
+            DisplayProgress(test, CancelSource);
             sw.Stop();
 
             Beep();
@@ -107,7 +110,7 @@ namespace ServerRequestTestLibrary
                     Beep();
                 }
                 ForegroundColor = ConsoleColor.Red;
-                WriteLine($"[кол-во запросов: {_single.Count}, из них успехов: {Successes}]");
+                WriteLine($"[кол-во запросов: {Count}, из них успехов: {Successes}]");
                 WriteLine(IsNotCancelled ?
                     $"Ошибка в запросе: {test.Exception?.Message ?? "\b\b/"}." :
                     "Тест принудительно прерван.");
@@ -115,7 +118,7 @@ namespace ServerRequestTestLibrary
             else
             {
                 ForegroundColor = ConsoleColor.Green;
-                WriteLine($"[кол-во запросов: {_single.Count}]\nТест прошёл успешно за {sw.Elapsed}.");
+                WriteLine($"[кол-во запросов: {Count}]\nТест прошёл успешно за {sw.Elapsed}.");
             }
             ResetColor();
             WriteLine();

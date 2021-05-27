@@ -7,7 +7,7 @@ namespace ConsoleServerRequestTest
     /// <summary>
     /// Точка входа
     /// </summary>
-    class Program
+    internal class Program
     {
         /// <summary>
         /// Управление запуском тестирования
@@ -37,8 +37,8 @@ namespace ConsoleServerRequestTest
                 1 => new SocketClient(host, count),
                 _ => new SimpleHttp(host, count)
             };
-            
-            Provider.RunInConsole(source);
+
+            ConsoleProvider.RunInConsole(source);
 
             WriteLine("Провести новый тест?\n(r - повторить предыдущий; c - изменить кол-во тестов; y - новый, выход - любая клавиша)");
             switch (ReadKey().KeyChar)

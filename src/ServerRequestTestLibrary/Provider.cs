@@ -8,8 +8,25 @@ namespace ServerRequestTestLibrary
     /// <summary>
     /// Провайдер управления теста 
     /// </summary>
-    public partial class Provider : IDisposable
+    public class Provider : IDisposable
     {
+        #region Protected Members
+        /// <summary>
+        /// Сигнализация отмены/прерывания тестирования
+        /// </summary>
+        protected readonly CancellationTokenSource CancelSource = new();
+
+        /// <summary>
+        /// Получает инфо о сигнале отмены
+        /// </summary>
+        protected bool IsNotCancelled => !CancelSource.IsCancellationRequested;
+
+        /// <summary>
+        /// Кол-во параллельных тестов
+        /// </summary>
+        protected int Count => _single.Count;
+        #endregion
+
         #region Private Members
         /// <summary>
         /// Оболочка запросов
@@ -17,31 +34,17 @@ namespace ServerRequestTestLibrary
         private readonly Request _single;
 
         /// <summary>
-        /// Сигнализация отмены/прерывания тестирования
-        /// </summary>
-        private readonly CancellationTokenSource _cancelSource = new();
-
-        /// <summary>
-        /// Получает инфо о сигнале отмены
-        /// </summary>
-        private bool IsNotCancelled => !_cancelSource.IsCancellationRequested;
-
-        /// <summary>
-        /// Запуск теста в консольном приложении
-        /// </summary>
-        private partial void RunInConsole();
-
-        /// <summary>
         /// приватный счётчик успешно завершённых тестов
         /// </summary>
         private int _successes;
+        #endregion
+
+        #region Public Members
         /// <summary>
         /// Счётчик успешно завершённых тестов
         /// </summary>
         public int Successes => _successes;
-        #endregion
 
-        #region Public Members
         /// <summary>
         /// Инициализация провайдера
         /// </summary>
@@ -49,7 +52,7 @@ namespace ServerRequestTestLibrary
         public Provider(Request single)
         {
             _single = single;
-            _single.Cancel = _cancelSource.Token;
+            _single.Cancel = CancelSource.Token;
         }
         
         /// <summary>
@@ -82,31 +85,13 @@ namespace ServerRequestTestLibrary
 
         #region Implements of IDisposable
         /// <summary>
-        /// Индикатор утилизации
-        /// </summary>
-        private bool _disposing;
-
-        /// <summary>
         /// Утилизация
         /// </summary>
         public void Dispose()
         {
-            Dispose(_disposing);
+            CancelSource.Cancel();
+            CancelSource.Dispose();
             GC.SuppressFinalize(this);
-            _disposing = true;
-        }
-
-        /// <summary>
-        /// Утилизация сигнализация отмены тестирования
-        /// </summary>
-        /// <param name="disposing">Показывает необходимость утилизации</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _cancelSource.Cancel();
-                _cancelSource.Dispose();
-            }
         }
         #endregion
     }
