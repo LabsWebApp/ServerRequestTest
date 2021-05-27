@@ -25,10 +25,10 @@ namespace ServerRequestTestLibrary.SingleRequests
             Count = count;
             Run = _ =>
             {
+                if (Cancel.IsCancellationRequested)
+                    return;
                 try
                 {
-                    if (Cancel.IsCancellationRequested)
-                        return;
                     HttpClient httpClient = new();
                     var result = httpClient.GetStringAsync(Host, Cancel).Result;
                     if (Cancel.IsCancellationRequested)
