@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ServerRequestTest;
 using static System.Console;
 using ServerRequestTest.SingleRequests;
 
-namespace ServerRequestTest
+namespace ConsoleServerRequestTest
 {
     class Program
     {

@@ -2,60 +2,57 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ServerRequestTest.SingleRequests;
-using ServerRequestTest.SingleRequests.Exceptions;
 
 namespace ServerRequestTest
 {
     public partial class Provider : IDisposable
     {
+        #region Private Members
         private readonly Request _single;
         private readonly CancellationTokenSource _cancelSource = new();
-        private readonly object _lock = new();
         private partial void RunInConsole();
         private bool IsNotCancelled => !_cancelSource.IsCancellationRequested;
 
-        public ushort Successes { get; private set; }
+        private int _successes;
+        public int Successes => _successes;
+        #endregion
 
+        #region Public Members
         public Provider(Request single)
         {
             _single = single;
             _single.Cancel = _cancelSource.Token;
-        } 
-
-        public Task RunAsync() => Task.Run(() =>
-            Parallel.For(0, _single.Count, 
+        }
+        public Task Run() => Task.Run(() =>
+            Parallel.For(0, _single.Count,
                 (i, pls) =>
-            {
-                if (IsNotCancelled)
                 {
-                    try
+                    if (IsNotCancelled)
                     {
-                        _single.Run.Invoke(i);
-                        lock (_lock)
+                        try
                         {
-                            Successes++;
+                            _single.Run.Invoke(i);
+                            Interlocked.Increment(ref _successes);
+                        }
+                        catch
+                        {
+                            pls.Break();
+                            throw;
                         }
                     }
-                    catch 
+                    else
                     {
-                        _cancelSource.Cancel();
                         pls.Break();
-                        throw;
                     }
-                }
-                else
-                {
-                    _cancelSource.Cancel();
-                    pls.Break();
-                }
-            }));
+                }));
+        #endregion
 
+        #region Implements of IDisposable
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -64,5 +61,6 @@ namespace ServerRequestTest
                 _cancelSource.Dispose();
             }
         }
+        #endregion
     }
 }

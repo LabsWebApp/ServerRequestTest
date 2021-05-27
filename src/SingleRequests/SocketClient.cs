@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using ServerRequestTest.SingleRequests.Exceptions;
 
 namespace ServerRequestTest.SingleRequests
 {
