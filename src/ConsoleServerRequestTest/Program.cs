@@ -13,12 +13,13 @@ namespace ConsoleServerRequestTest
         /// Управление запуском тестирования
         /// </summary>
         static void Main()
-        { 
+        {
             Restart:
-            WriteLine("Выберите ('1' - SocketClient, любая клавиша - SimpleHttp):");
+            WriteLine("Выберите\n'1' - SocketClient\n'2' - SignalRClient\nлюбая клавиша - SimpleHttp):");
             int sw = ReadKey().KeyChar switch
             {
                 '1' => 1,
+                '2' => 2,
                 _ => 0
             };
             Write("\b");
@@ -35,6 +36,7 @@ namespace ConsoleServerRequestTest
             Request source = sw switch
             {
                 1 => new SocketClient(host, count),
+                2 => new SignalRClient(host, count),
                 _ => new SimpleHttp(host, count)
             };
 

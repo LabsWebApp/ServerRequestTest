@@ -10,7 +10,7 @@ namespace ServerRequestTestLibrary.SingleRequests.Exceptions
         /// <summary>
         /// Инициализация ошибки
         /// </summary>
-        /// <param name="message">Сообщение о превышении размера контента</param>
+        /// <param name="message">Сообщение недопустимости контента</param>
         public ContentException(string message) : base(message) { }
     }
 }

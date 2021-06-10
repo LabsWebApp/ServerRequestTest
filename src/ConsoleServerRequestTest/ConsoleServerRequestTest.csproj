@@ -10,6 +10,7 @@
     <Description>Стресс-тест для проверки работоспособности различных соединений - консольный запуск</Description>
     <ApplicationIcon>request.ico</ApplicationIcon>
     <Version>1.0.1</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>

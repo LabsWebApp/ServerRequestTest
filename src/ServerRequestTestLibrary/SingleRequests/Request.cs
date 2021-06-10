@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerRequestTestLibrary.SingleRequests.Helper;
+using System;
 using System.Threading;
 
 namespace ServerRequestTestLibrary.SingleRequests
@@ -57,5 +58,13 @@ namespace ServerRequestTestLibrary.SingleRequests
         /// Ошибка, случившаяся в ходе выполнения теста
         /// </summary>
         public Exception Error { get; protected set; }
+
+        protected static string SetData(int i, DataMode mode = DataMode.Int) =>
+            mode switch
+            {
+                DataMode.Guid => Guid.NewGuid().ToString(),
+                DataMode.GuidAndInt => $"{Guid.NewGuid()} {i}",
+                _ => i.ToString()
+            };
     }
 }

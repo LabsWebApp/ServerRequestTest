@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerRequestTestLibrary.SingleRequests.Helper;
+using System;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -7,65 +8,22 @@ using System.Text;
 namespace ServerRequestTestLibrary.SingleRequests
 {
     /// <summary>
-    /// тип передаваемых данных серверу
-    /// </summary>
-    public enum SocketDataMode
-    {
-        Guid,
-        Int,
-        GuidAndInt
-    }
-
-    /// <summary>
     /// Оболочка Socket-запроса со стороны клиента
     /// </summary>
-    public class SocketClient : Request
+    public class SocketClient : PortRequest
     {
-        private const int DefaultPort = 6666;
-        private readonly int _port = DefaultPort;//10.4.80.2
         public SocketClient(
             string host,
             int count = 1,
-            SocketDataMode mode = SocketDataMode.Int)
+            DataMode mode = DataMode.Int) : base(host, count)
         {
-            var colon = host.IndexOf(':');
-            if (string.IsNullOrWhiteSpace(host))
-            {
-                Host = "127.0.0.1";
-            }
-            else if (colon == 0)
-            {
-                Host = "127.0.0.1";
-                if (!int.TryParse(host.Remove(0, 1), out _port))
-                    _port = DefaultPort;
-            }
-            else if (colon < 0)
-            {
-                Host = host.Trim();
-                _port = DefaultPort;
-            }
-
-            if (!string.IsNullOrWhiteSpace(host) && colon > 0) 
-            {
-                var hostPort = host.Split(':');
-                if (hostPort.Length == 2)
-                {
-                    Host = hostPort[0].Trim();
-                    if (!int.TryParse(hostPort[1].Trim(), out _port))
-                        _port = DefaultPort;
-                }
-            }
-
-            Count = count;
             Run = i =>
             {
                 try
                 {
                     if (Cancel.IsCancellationRequested)
                         return;
-                    if (!Host.Contains('.'))
-                        throw new ArgumentException("Не верно указан host.");
-                    using TcpClient client = new(Host, _port);
+                    using TcpClient client = new(Host, Port);
                     IPGlobalProperties ipProperties =
                         IPGlobalProperties.GetIPGlobalProperties();
                     var tcpConnections = ipProperties
@@ -79,23 +37,18 @@ namespace ServerRequestTestLibrary.SingleRequests
                         TcpState stateOfConnection = tcpConnections.First().State;
                         if (stateOfConnection != TcpState.Established)
                         {
-                            Error = new ArgumentException($"Нет соединения с {Host}:{_port}.");
+                            Error = new ArgumentException($"Нет соединения с {Host}:{Port}.");
                             throw Error;
                         }
                     }
                     else
                     {
-                        Error = new ArgumentException($"Не верно указаны - {Host}:{_port}.");
+                        Error = new ArgumentException($"Не верно указаны - {Host}:{Port}.");
                         throw Error;
                     }
 
-                    string data = mode switch
-                    {
-                        SocketDataMode.Int => i.ToString(),
-                        _ => string.Empty
-                    };
                     var stream = client.GetStream();
-                    byte[] buffer = Encoding.UTF8.GetBytes(data);
+                    byte[] buffer = Encoding.UTF8.GetBytes(SetData(i, mode));
                     stream.WriteAsync(buffer, 0, buffer.Length, Cancel);
                     stream.FlushAsync(Cancel);
                 }

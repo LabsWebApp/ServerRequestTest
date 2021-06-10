@@ -102,7 +102,7 @@ namespace ConsoleServerRequestTest
             sw.Stop();
 
             Beep();
-            if (test.IsFaulted)
+            if (test.IsFaulted || !IsNotCancelled)
             {
                 if (IsNotCancelled)
                 {
