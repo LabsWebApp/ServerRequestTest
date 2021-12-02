@@ -110,7 +110,7 @@ namespace ConsoleServerRequestTest
                     Beep();
                 }
                 ForegroundColor = ConsoleColor.Red;
-                WriteLine($"[кол-во запросов: {Count}, из них успехов: {Successes}]");
+                WriteLine($"[кол-во запросов: {Count}, из них успели начать: {Attempts}, успехов: {Successes}]");
                 WriteLine(IsNotCancelled ?
                     $"Ошибка в запросе: {test.Exception?.Message ?? "\b\b/"}." :
                     "Тест принудительно прерван.");

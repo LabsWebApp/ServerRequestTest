@@ -63,7 +63,7 @@ namespace ServerRequestTestLibrary.SingleRequests
             mode switch
             {
                 DataMode.Guid => Guid.NewGuid().ToString(),
-                DataMode.GuidAndInt => $"{Guid.NewGuid()} {i}",
+                DataMode.GuidAndInt => $"{Guid.NewGuid()} {i}", 
                 _ => i.ToString()
             };
     }

@@ -37,6 +37,11 @@ namespace ServerRequestTestLibrary
         /// приватный счётчик успешно завершённых тестов
         /// </summary>
         private int _successes;
+        
+        /// <summary>
+        /// приватный счётчик начатых тестов
+        /// </summary>
+        private int _attempts;
         #endregion
 
         #region Public Members
@@ -44,6 +49,11 @@ namespace ServerRequestTestLibrary
         /// Счётчик успешно завершённых тестов
         /// </summary>
         public int Successes => _successes;
+
+        /// <summary>
+        /// Счётчик начатых тестов
+        /// </summary>
+        public int Attempts => _attempts;
 
         /// <summary>
         /// Инициализация провайдера
@@ -60,27 +70,34 @@ namespace ServerRequestTestLibrary
         /// </summary>
         /// <returns>Задачу выполнения тестов</returns>
         public Task Run() => Task.Run(() =>
-            Parallel.For(0, _single.Count,
+        {
+            for (int i = 0; i < _single.Count; i++)
+            {
+                
+            }
+            return Parallel.For(0, _single.Count,
                 (i, pls) =>
                 {
                     if (IsNotCancelled)
                     {
                         try
                         {
+                            Interlocked.Increment(ref _attempts);
                             _single.Run.Invoke(i);
                             Interlocked.Increment(ref _successes);
                         }
                         catch
                         {
                             pls.Break();
-                            throw;
+                            //throw;
                         }
                     }
                     else
                     {
                         pls.Break();
                     }
-                }));
+                });
+        });
         #endregion
 
         #region Implements of IDisposable
