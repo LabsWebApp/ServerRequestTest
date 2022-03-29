@@ -1,12 +1,11 @@
-﻿namespace ServerRequestTestLibrary.SingleRequests.Helper
+﻿namespace ServerRequestTestLibrary.SingleRequests.Helper;
+
+/// <summary>
+/// тип передаваемых данных серверу
+/// </summary>
+public enum DataMode
 {
-    /// <summary>
-    /// тип передаваемых данных серверу
-    /// </summary>
-    public enum DataMode
-    {
-        Guid,
-        Int,
-        GuidAndInt
-    }
+    Guid,
+    Int,
+    GuidAndInt
 }
